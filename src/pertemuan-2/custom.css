@@ -1,0 +1,73 @@
+/* Styling untuk keseluruhan halaman */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef2f7;
+    color: #2c3e50;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Container utama (Card) */
+.card {
+    max-width: 500px;
+    width: 100%;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e8ed;
+}
+
+/* Header utama */
+h1 {
+    color: #2563eb;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Judul Nama */
+h3 {
+    color: #1e40af;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Paragraf */
+p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 8px 0;
+    text-align: center;
+}
+
+/* Garis pemisah */
+hr {
+    border: none;
+    height: 1px;
+    background: #e5e7eb;
+    margin: 15px 0;
+}
+
+/* Status/Small text */
+small {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    text-align: center;
+    color: #10b981; /* Warna hijau untuk status aktif */
+    background: #ecfdf5;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 10px auto;
+    width: fit-content;
+}
+
+/* Footer di Container.jsx */
+footer {
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
