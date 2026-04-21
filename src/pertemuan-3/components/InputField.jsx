@@ -1,4 +1,3 @@
-// src/pertemuan-3/componen/InputField.jsx
 export default function InputField({ label, type, placeholder, name, value, onChange, error }) {
     return (
         <div className="mb-3">

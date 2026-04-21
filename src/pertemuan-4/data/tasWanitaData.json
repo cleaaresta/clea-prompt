@@ -1,0 +1,562 @@
+[
+  {
+    "id": 1,
+    "nama": "Elegance Tote Bag",
+    "brand": "Fossil",
+    "harga": 2850000,
+    "kategori": "Tote Bag",
+    "warna": "Coklat Muda",
+    "stok": 15,
+    "rating": 4.8,
+    "gambar": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=500&h=500&fit=crop",
+    "deskripsi": "Tote bag elegan dengan desain minimalis, cocok untuk kerja dan acara formal.",
+    "dimensi": {
+      "panjang": 38,
+      "lebar": 15,
+      "tinggi": 30,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Sapi Asli",
+      "bahan_dalam": "Suede",
+      "aksesoris": "Logam Emas"
+    },
+    "penjual": {
+      "nama_toko": "Luxe Bags Official",
+      "kota": "Jakarta",
+      "rating_toko": 4.9
+    }
+  },
+  {
+    "id": 2,
+    "nama": "Chic Sling Bag",
+    "brand": "Charles & Keith",
+    "harga": 1250000,
+    "kategori": "Sling Bag",
+    "warna": "Hitam",
+    "stok": 32,
+    "rating": 4.5,
+    "gambar": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&h=500&fit=crop",
+    "deskripsi": "Sling bag modern dengan tali rantai yang stylish, ideal untuk hang out.",
+    "dimensi": {
+      "panjang": 22,
+      "lebar": 8,
+      "tinggi": 16,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Sintetis PU",
+      "bahan_dalam": "Polyester",
+      "aksesoris": "Logam Silver"
+    },
+    "penjual": {
+      "nama_toko": "Fashion Hub",
+      "kota": "Bandung",
+      "rating_toko": 4.7
+    }
+  },
+  {
+    "id": 3,
+    "nama": "Classic Clutch Evening",
+    "brand": "Kate Spade",
+    "harga": 3500000,
+    "kategori": "Clutch",
+    "warna": "Merah Marun",
+    "stok": 8,
+    "rating": 4.9,
+    "gambar": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=500&fit=crop",
+    "deskripsi": "Clutch mewah dengan detail kristal, sempurna untuk pesta malam.",
+    "dimensi": {
+      "panjang": 25,
+      "lebar": 5,
+      "tinggi": 14,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Satin Premium",
+      "bahan_dalam": "Silk",
+      "aksesoris": "Kristal Swarovski"
+    },
+    "penjual": {
+      "nama_toko": "Glamour Store",
+      "kota": "Surabaya",
+      "rating_toko": 4.8
+    }
+  },
+  {
+    "id": 4,
+    "nama": "Urban Backpack Mini",
+    "brand": "Michael Kors",
+    "harga": 4200000,
+    "kategori": "Backpack",
+    "warna": "Navy Blue",
+    "stok": 12,
+    "rating": 4.7,
+    "gambar": "https://images.unsplash.com/photo-1622560480654-d96214fdc887?w=500&h=500&fit=crop",
+    "deskripsi": "Backpack mini yang trendy dengan banyak kompartemen, cocok untuk traveling.",
+    "dimensi": {
+      "panjang": 26,
+      "lebar": 12,
+      "tinggi": 32,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Nylon Premium",
+      "bahan_dalam": "Cotton Canvas",
+      "aksesoris": "Logam Gunmetal"
+    },
+    "penjual": {
+      "nama_toko": "Bag Paradise",
+      "kota": "Jakarta",
+      "rating_toko": 4.6
+    }
+  },
+  {
+    "id": 5,
+    "nama": "Bohemian Hobo Bag",
+    "brand": "Coach",
+    "harga": 5100000,
+    "kategori": "Hobo Bag",
+    "warna": "Tan",
+    "stok": 6,
+    "rating": 4.6,
+    "gambar": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop",
+    "deskripsi": "Hobo bag bernuansa bohemian dengan aksen fringe yang unik.",
+    "dimensi": {
+      "panjang": 40,
+      "lebar": 14,
+      "tinggi": 35,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Domba",
+      "bahan_dalam": "Linen",
+      "aksesoris": "Logam Antik Bronze"
+    },
+    "penjual": {
+      "nama_toko": "Boho Chic Store",
+      "kota": "Yogyakarta",
+      "rating_toko": 4.5
+    }
+  },
+  {
+    "id": 6,
+    "nama": "Professional Briefcase Bag",
+    "brand": "Tory Burch",
+    "harga": 3900000,
+    "kategori": "Tote Bag",
+    "warna": "Hitam",
+    "stok": 20,
+    "rating": 4.8,
+    "gambar": "https://images.unsplash.com/photo-1614179689702-355944cd0918?w=500&h=500&fit=crop",
+    "deskripsi": "Tas kerja profesional dengan slot laptop, sempurna untuk wanita karir.",
+    "dimensi": {
+      "panjang": 42,
+      "lebar": 16,
+      "tinggi": 32,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Sapi Full Grain",
+      "bahan_dalam": "Microfiber",
+      "aksesoris": "Logam Emas Rose"
+    },
+    "penjual": {
+      "nama_toko": "Career Woman Shop",
+      "kota": "Jakarta",
+      "rating_toko": 4.9
+    }
+  },
+  {
+    "id": 7,
+    "nama": "Pastel Bucket Bag",
+    "brand": "Furla",
+    "harga": 2100000,
+    "kategori": "Bucket Bag",
+    "warna": "Pink Pastel",
+    "stok": 25,
+    "rating": 4.4,
+    "gambar": "https://images.unsplash.com/photo-1591561954557-26941169b49e?w=500&h=500&fit=crop",
+    "deskripsi": "Bucket bag cantik warna pastel, pilihan sempurna untuk gaya kasual feminine.",
+    "dimensi": {
+      "panjang": 24,
+      "lebar": 13,
+      "tinggi": 26,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Sintetis Vegan",
+      "bahan_dalam": "Cotton",
+      "aksesoris": "Logam Silver Matte"
+    },
+    "penjual": {
+      "nama_toko": "Pastel Dreams",
+      "kota": "Bandung",
+      "rating_toko": 4.3
+    }
+  },
+  {
+    "id": 8,
+    "nama": "Vintage Saddle Bag",
+    "brand": "Fossil",
+    "harga": 1800000,
+    "kategori": "Sling Bag",
+    "warna": "Coklat Tua",
+    "stok": 18,
+    "rating": 4.3,
+    "gambar": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=500&h=500&fit=crop",
+    "deskripsi": "Saddle bag bergaya vintage dengan detail jahitan tangan yang indah.",
+    "dimensi": {
+      "panjang": 28,
+      "lebar": 9,
+      "tinggi": 20,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Pull-Up",
+      "bahan_dalam": "Suede",
+      "aksesoris": "Logam Antik Kuningan"
+    },
+    "penjual": {
+      "nama_toko": "Retro Style Co",
+      "kota": "Semarang",
+      "rating_toko": 4.4
+    }
+  },
+  {
+    "id": 9,
+    "nama": "Glamour Sequin Clutch",
+    "brand": "Jimmy Choo",
+    "harga": 7500000,
+    "kategori": "Clutch",
+    "warna": "Gold",
+    "stok": 4,
+    "rating": 5.0,
+    "gambar": "https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500&h=500&fit=crop",
+    "deskripsi": "Clutch berkilau dengan sequin premium, statement piece untuk gala dinner.",
+    "dimensi": {
+      "panjang": 22,
+      "lebar": 4,
+      "tinggi": 12,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Sequin & Satin",
+      "bahan_dalam": "Silk Premium",
+      "aksesoris": "Berlian Imitasi"
+    },
+    "penjual": {
+      "nama_toko": "Glamour Store",
+      "kota": "Jakarta",
+      "rating_toko": 4.8
+    }
+  },
+  {
+    "id": 10,
+    "nama": "Sporty Gym Tote",
+    "brand": "Nike",
+    "harga": 950000,
+    "kategori": "Tote Bag",
+    "warna": "Abu-abu",
+    "stok": 40,
+    "rating": 4.2,
+    "gambar": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=500&fit=crop",
+    "deskripsi": "Tote bag sporty dengan kompartemen sepatu terpisah, ideal untuk gym.",
+    "dimensi": {
+      "panjang": 45,
+      "lebar": 20,
+      "tinggi": 35,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Polyester Ripstop",
+      "bahan_dalam": "Nylon",
+      "aksesoris": "Zipper YKK"
+    },
+    "penjual": {
+      "nama_toko": "Sportiva",
+      "kota": "Surabaya",
+      "rating_toko": 4.5
+    }
+  },
+  {
+    "id": 11,
+    "nama": "Luxury Chain Shoulder Bag",
+    "brand": "Gucci",
+    "harga": 12500000,
+    "kategori": "Shoulder Bag",
+    "warna": "Cream",
+    "stok": 3,
+    "rating": 5.0,
+    "gambar": "https://images.unsplash.com/photo-1548863227-3af567fc3b27?w=500&h=500&fit=crop",
+    "deskripsi": "Shoulder bag mewah dengan rantai emas yang ikonik, simbol kemewahan.",
+    "dimensi": {
+      "panjang": 30,
+      "lebar": 10,
+      "tinggi": 20,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Kambing Matelassé",
+      "bahan_dalam": "Silk Jacquard",
+      "aksesoris": "Rantai Emas 18K Plated"
+    },
+    "penjual": {
+      "nama_toko": "Luxe Bags Official",
+      "kota": "Jakarta",
+      "rating_toko": 4.9
+    }
+  },
+  {
+    "id": 12,
+    "nama": "Canvas Weekend Bag",
+    "brand": "Longchamp",
+    "harga": 1650000,
+    "kategori": "Tote Bag",
+    "warna": "Hijau Army",
+    "stok": 22,
+    "rating": 4.4,
+    "gambar": "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=500&h=500&fit=crop",
+    "deskripsi": "Tote bag kanvas yang ringan dan foldable, sempurna untuk weekend getaway.",
+    "dimensi": {
+      "panjang": 44,
+      "lebar": 18,
+      "tinggi": 30,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Canvas Organik",
+      "bahan_dalam": "Polyester Daur Ulang",
+      "aksesoris": "Leather Trim"
+    },
+    "penjual": {
+      "nama_toko": "Eco Fashion ID",
+      "kota": "Bali",
+      "rating_toko": 4.6
+    }
+  },
+  {
+    "id": 13,
+    "nama": "Woven Rattan Bag",
+    "brand": "Anya Hindmarch",
+    "harga": 1350000,
+    "kategori": "Sling Bag",
+    "warna": "Natural",
+    "stok": 14,
+    "rating": 4.3,
+    "gambar": "https://images.unsplash.com/photo-1590739225287-bd31519780c3?w=500&h=500&fit=crop",
+    "deskripsi": "Tas rotan anyaman tangan Bali, memberi sentuhan tropis yang autentik.",
+    "dimensi": {
+      "panjang": 20,
+      "lebar": 8,
+      "tinggi": 20,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Rotan Alami",
+      "bahan_dalam": "Batik Cotton",
+      "aksesoris": "Kulit & Kerang"
+    },
+    "penjual": {
+      "nama_toko": "Bali Artisan",
+      "kota": "Bali",
+      "rating_toko": 4.7
+    }
+  },
+  {
+    "id": 14,
+    "nama": "Mini Crossbody Flap",
+    "brand": "Charles & Keith",
+    "harga": 890000,
+    "kategori": "Sling Bag",
+    "warna": "Lilac",
+    "stok": 28,
+    "rating": 4.5,
+    "gambar": "https://images.unsplash.com/photo-1606522754091-d86bbd100969?w=500&h=500&fit=crop",
+    "deskripsi": "Crossbody mungil warna lilac yang trendi, pas untuk daily outfit.",
+    "dimensi": {
+      "panjang": 18,
+      "lebar": 7,
+      "tinggi": 14,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Kulit Sintetis Premium",
+      "bahan_dalam": "Polyester",
+      "aksesoris": "Logam Silver Glossy"
+    },
+    "penjual": {
+      "nama_toko": "Fashion Hub",
+      "kota": "Bandung",
+      "rating_toko": 4.7
+    }
+  },
+  {
+    "id": 15,
+    "nama": "Quilted Chain Bag",
+    "brand": "Chanel",
+    "harga": 15000000,
+    "kategori": "Shoulder Bag",
+    "warna": "Hitam",
+    "stok": 2,
+    "rating": 5.0,
+    "gambar": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=500&fit=crop",
+    "deskripsi": "Ikon fashion sepanjang masa, quilted bag dengan double flap klasik.",
+    "dimensi": {
+      "panjang": 25,
+      "lebar": 7,
+      "tinggi": 16,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Lambskin Quilted",
+      "bahan_dalam": "Burgundy Leather",
+      "aksesoris": "Rantai Interwoven Leather"
+    },
+    "penjual": {
+      "nama_toko": "Luxe Bags Official",
+      "kota": "Jakarta",
+      "rating_toko": 4.9
+    }
+  },
+  {
+    "id": 16,
+    "nama": "Travel Duffle Bag",
+    "brand": "Tumi",
+    "harga": 6800000,
+    "kategori": "Backpack",
+    "warna": "Hitam",
+    "stok": 10,
+    "rating": 4.7,
+    "gambar": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=500&fit=crop",
+    "deskripsi": "Duffle bag premium untuk perjalanan bisnis, tahan air dan ringan.",
+    "dimensi": {
+      "panjang": 50,
+      "lebar": 25,
+      "tinggi": 30,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Ballistic Nylon",
+      "bahan_dalam": "Nylon Tahan Air",
+      "aksesoris": "Hardware Gunmetal"
+    },
+    "penjual": {
+      "nama_toko": "Travel Gear Pro",
+      "kota": "Jakarta",
+      "rating_toko": 4.8
+    }
+  },
+  {
+    "id": 17,
+    "nama": "Floral Embroidered Bag",
+    "brand": "Cath Kidston",
+    "harga": 780000,
+    "kategori": "Tote Bag",
+    "warna": "Putih Floral",
+    "stok": 35,
+    "rating": 4.1,
+    "gambar": "https://images.unsplash.com/photo-1612902456551-404b9a18e81e?w=500&h=500&fit=crop",
+    "deskripsi": "Tote bag bermotif bunga dengan bordiran halus, gaya English countryside.",
+    "dimensi": {
+      "panjang": 36,
+      "lebar": 14,
+      "tinggi": 28,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Cotton Canvas Printed",
+      "bahan_dalam": "Cotton",
+      "aksesoris": "Benang Bordir Silk"
+    },
+    "penjual": {
+      "nama_toko": "Garden Style Shop",
+      "kota": "Malang",
+      "rating_toko": 4.2
+    }
+  },
+  {
+    "id": 18,
+    "nama": "Geometric Box Bag",
+    "brand": "Issey Miyake",
+    "harga": 4500000,
+    "kategori": "Clutch",
+    "warna": "Silver Metalik",
+    "stok": 7,
+    "rating": 4.6,
+    "gambar": "https://images.unsplash.com/photo-1575032617751-6ddec2089882?w=500&h=500&fit=crop",
+    "deskripsi": "Box bag futuristik dengan pola geometris, statement piece yang eye-catching.",
+    "dimensi": {
+      "panjang": 20,
+      "lebar": 10,
+      "tinggi": 15,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "PVC Metalik",
+      "bahan_dalam": "Microfiber",
+      "aksesoris": "Magnetic Snap Premium"
+    },
+    "penjual": {
+      "nama_toko": "Avant Garde ID",
+      "kota": "Jakarta",
+      "rating_toko": 4.5
+    }
+  },
+  {
+    "id": 19,
+    "nama": "Eco Jute Shopper",
+    "brand": "The Body Shop",
+    "harga": 350000,
+    "kategori": "Tote Bag",
+    "warna": "Beige",
+    "stok": 50,
+    "rating": 4.0,
+    "gambar": "https://images.unsplash.com/photo-1597633425046-08f5110420b5?w=500&h=500&fit=crop",
+    "deskripsi": "Shopper bag ramah lingkungan dari bahan jute, untuk belanja sehari-hari.",
+    "dimensi": {
+      "panjang": 40,
+      "lebar": 15,
+      "tinggi": 35,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Jute Organik",
+      "bahan_dalam": "Unlined",
+      "aksesoris": "Tali Katun"
+    },
+    "penjual": {
+      "nama_toko": "Green Living Store",
+      "kota": "Yogyakarta",
+      "rating_toko": 4.3
+    }
+  },
+  {
+    "id": 20,
+    "nama": "Crystal Minaudière",
+    "brand": "Judith Leiber",
+    "harga": 18500000,
+    "kategori": "Clutch",
+    "warna": "Multicolor",
+    "stok": 1,
+    "rating": 5.0,
+    "gambar": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=500&h=500&fit=crop",
+    "deskripsi": "Minaudière penuh kristal handmade, karya seni yang bisa dibawa kemana-mana.",
+    "dimensi": {
+      "panjang": 16,
+      "lebar": 5,
+      "tinggi": 10,
+      "satuan": "cm"
+    },
+    "material": {
+      "bahan_utama": "Metal & Crystal",
+      "bahan_dalam": "Metallic Leather",
+      "aksesoris": "Full Crystal Encrusted"
+    },
+    "penjual": {
+      "nama_toko": "Luxe Bags Official",
+      "kota": "Jakarta",
+      "rating_toko": 4.9
+    }
+  }
+]
