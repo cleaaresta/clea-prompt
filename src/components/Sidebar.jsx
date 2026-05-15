@@ -1,13 +1,13 @@
 import { Link, NavLink } from 'react-router-dom'
 
 const navItems = [
-  { label: 'Dashboard', to: '/admin' },
-  { label: 'Products', to: '/admin/products' },
-  { label: 'Make Sale', to: '/admin/make-sale' },
-  { label: 'Inventory', to: '/admin/inventory' },
-  { label: 'Customers', to: '/admin/customers' },
-  { label: 'Analytics', to: '/admin/analytics' },
-  { label: 'Settings', to: '/admin/settings' }
+  { label: 'Dashboard', to: '/admin', icon: '📊' },
+  { label: 'Products', to: '/admin/products', icon: '💄' },
+  { label: 'Make Sale', to: '/admin/make-sale', icon: '🛒' },
+  { label: 'Inventory', to: '/admin/inventory', icon: '📦' },
+  { label: 'Customers', to: '/admin/customers', icon: '👥' },
+  { label: 'Analytics', to: '/admin/analytics', icon: '📈' },
+  { label: 'Settings', to: '/admin/settings', icon: '⚙️' }
 ]
 
 export default function Sidebar() {
@@ -31,6 +31,7 @@ export default function Sidebar() {
               isActive ? 'nav-link active' : 'nav-link'
             }
           >
+            <span className="nav-icon">{item.icon}</span>
             {item.label}
           </NavLink>
         ))}
