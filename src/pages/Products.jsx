@@ -1,3 +1,9 @@
+import { Button, Badge } from '../components/1-basic'
+import { Table } from '../components/3-data-display'
+import { PageHeaderSection, PanelSection } from '../components/6-section'
+import { EditButton, DeleteButton } from '../components/13-action'
+import { FadeIn } from '../components/15-animation'
+
 export default function Products() {
   const products = [
     { id: 1, name: 'Lipstick Red', category: 'Lips', price: '$12.99', stock: 45 },
@@ -6,47 +12,48 @@ export default function Products() {
     { id: 4, name: 'Blush Rose', category: 'Face', price: '$15.99', stock: 52 },
   ]
 
+  const columns = [
+    { key: 'name', label: 'Product Name' },
+    {
+      key: 'category',
+      label: 'Category',
+      render: (val) => <Badge>{val}</Badge>,
+    },
+    { key: 'price', label: 'Price' },
+    {
+      key: 'stock',
+      label: 'Stock',
+      render: (val) => (
+        <span className={val > 40 ? 'stock-high' : 'stock-med'}>
+          {val} pcs
+        </span>
+      ),
+    },
+  ]
+
   return (
     <section>
-      <div className="page-header-section">
-        <h2 className="page-section-title">Products</h2>
-        <p className="page-section-text">Manage makeup products, variants, and pricing.</p>
-      </div>
-      <div className="panel">
-        <div className="panel-header">
-          <h3 className="panel-title">All Products</h3>
-          <button className="button button-primary button-sm">+ Add Product</button>
-        </div>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Product Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td><span className="badge">{product.category}</span></td>
-                <td>{product.price}</td>
-                <td>
-                  <span className={product.stock > 40 ? 'stock-high' : 'stock-med'}>
-                    {product.stock} pcs
-                  </span>
-                </td>
-                <td className="actions">
-                  <button className="btn-small edit">Edit</button>
-                  <button className="btn-small delete">Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <FadeIn>
+        <PageHeaderSection
+          title="Products"
+          subtitle="Manage makeup products, variants, and pricing."
+        />
+      </FadeIn>
+      <PanelSection
+        title="All Products"
+        headerAction={<Button variant="primary" size="sm">+ Add Product</Button>}
+      >
+        <Table
+          columns={columns}
+          data={products}
+          renderActions={(row) => (
+            <>
+              <EditButton />
+              <DeleteButton />
+            </>
+          )}
+        />
+      </PanelSection>
     </section>
   )
 }

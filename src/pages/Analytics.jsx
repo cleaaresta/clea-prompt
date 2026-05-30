@@ -1,53 +1,60 @@
+import { List } from '../components/3-data-display'
+import { PageHeaderSection, ChartSection } from '../components/6-section'
+import { BarChart } from '../components/9-chart'
+import { FadeIn, SlideUp } from '../components/15-animation'
+
 export default function Analytics() {
+  const revenueData = [
+    { label: 'Jan', value: 4200 },
+    { label: 'Feb', value: 3800 },
+    { label: 'Mar', value: 5100 },
+    { label: 'Apr', value: 4600 },
+    { label: 'May', value: 6200 },
+    { label: 'Jun', value: 7800 },
+  ]
+
+  const topProducts = [
+    { label: 'Lipstick Red', value: '152 sales' },
+    { label: 'Eyeshadow Palette', value: '98 sales' },
+    { label: 'Foundation Light', value: '87 sales' },
+  ]
+
+  const customerInsights = [
+    { label: 'New Customers', value: '24' },
+    { label: 'Repeat Rate', value: '68%' },
+    { label: 'Avg. Order Value', value: '$135' },
+  ]
+
   return (
     <section>
-      <div className="page-header-section">
-        <h2 className="page-section-title">Analytics</h2>
-        <p className="page-section-text">Review sales trends, category performance, and revenue insights.</p>
-      </div>
+      <FadeIn>
+        <PageHeaderSection
+          title="Analytics"
+          subtitle="Review sales trends, category performance, and revenue insights."
+        />
+      </FadeIn>
       <div className="analytics-grid">
-        <div className="panel">
-          <h3 className="panel-title">Monthly Revenue</h3>
-          <div className="chart-placeholder-large">Chart: Revenue Trend</div>
-        </div>
-        <div className="panel">
-          <h3 className="panel-title">Top Products</h3>
-          <div className="stats-list">
-            <div className="stat-item">
-              <span>Lipstick Red</span>
-              <span className="stat-value">152 sales</span>
-            </div>
-            <div className="stat-item">
-              <span>Eyeshadow Palette</span>
-              <span className="stat-value">98 sales</span>
-            </div>
-            <div className="stat-item">
-              <span>Foundation Light</span>
-              <span className="stat-value">87 sales</span>
-            </div>
-          </div>
-        </div>
-        <div className="panel">
-          <h3 className="panel-title">Customer Insights</h3>
-          <div className="stats-list">
-            <div className="stat-item">
-              <span>New Customers</span>
-              <span className="stat-value">24</span>
-            </div>
-            <div className="stat-item">
-              <span>Repeat Rate</span>
-              <span className="stat-value">68%</span>
-            </div>
-            <div className="stat-item">
-              <span>Avg. Order Value</span>
-              <span className="stat-value">$135</span>
-            </div>
-          </div>
-        </div>
-        <div className="panel">
-          <h3 className="panel-title">Category Performance</h3>
-          <div className="chart-placeholder-large">Chart: Category Breakdown</div>
-        </div>
+        <SlideUp delay="0s">
+          <section className="panel">
+            <h3 className="panel-title">Monthly Revenue</h3>
+            <BarChart data={revenueData} height={260} />
+          </section>
+        </SlideUp>
+        <SlideUp delay="0.1s">
+          <section className="panel">
+            <h3 className="panel-title">Top Products</h3>
+            <List items={topProducts} />
+          </section>
+        </SlideUp>
+        <SlideUp delay="0.2s">
+          <section className="panel">
+            <h3 className="panel-title">Customer Insights</h3>
+            <List items={customerInsights} />
+          </section>
+        </SlideUp>
+        <SlideUp delay="0.3s">
+          <ChartSection title="Category Performance" type="large" />
+        </SlideUp>
       </div>
     </section>
   )

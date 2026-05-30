@@ -1,0 +1,5 @@
+export { default as Avatar } from './Avatar'
+export { default as ProductImage } from './ProductImage'
+export { default as Thumbnail } from './Thumbnail'
+export { default as ImageGallery } from './ImageGallery'
+export { default as IconBadge } from './IconBadge'

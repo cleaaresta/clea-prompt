@@ -1,0 +1,5 @@
+export { default as Heading } from './Heading'
+export { default as Subtitle } from './Subtitle'
+export { default as Label } from './Label'
+export { default as Caption } from './Caption'
+export { default as Eyebrow } from './Eyebrow'

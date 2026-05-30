@@ -1,3 +1,9 @@
+import { Table } from '../components/3-data-display'
+import { PageHeaderSection, PanelSection } from '../components/6-section'
+import { StockStatus } from '../components/12-status'
+import { EditButton } from '../components/13-action'
+import { FadeIn } from '../components/15-animation'
+
 export default function Inventory() {
   const items = [
     { id: 1, name: 'Lipstick Red', sku: 'LIP-001', quantity: 45, reorder: 20, status: 'In Stock' },
@@ -6,47 +12,33 @@ export default function Inventory() {
     { id: 4, name: 'Blush Rose', sku: 'BLS-004', quantity: 52, reorder: 20, status: 'In Stock' },
   ]
 
+  const columns = [
+    { key: 'name', label: 'Product' },
+    { key: 'sku', label: 'SKU', cellClassName: 'monospace' },
+    { key: 'quantity', label: 'Quantity', cellClassName: 'text-center' },
+    { key: 'reorder', label: 'Reorder Level', cellClassName: 'text-center' },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (val) => <StockStatus status={val} />,
+    },
+  ]
+
   return (
     <section>
-      <div className="page-header-section">
-        <h2 className="page-section-title">Inventory</h2>
-        <p className="page-section-text">Monitor stock levels and reorder status for all makeup items.</p>
-      </div>
-      <div className="panel">
-        <div className="panel-header">
-          <h3 className="panel-title">Stock Status</h3>
-        </div>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>SKU</th>
-              <th>Quantity</th>
-              <th>Reorder Level</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td className="monospace">{item.sku}</td>
-                <td className="text-center">{item.quantity}</td>
-                <td className="text-center">{item.reorder}</td>
-                <td>
-                  <span className={`stock-status ${item.status.toLowerCase().replace(' ', '-')}`}>
-                    {item.status}
-                  </span>
-                </td>
-                <td className="actions">
-                  <button className="btn-small edit">Update</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <FadeIn>
+        <PageHeaderSection
+          title="Inventory"
+          subtitle="Monitor stock levels and reorder status for all makeup items."
+        />
+      </FadeIn>
+      <PanelSection title="Stock Status">
+        <Table
+          columns={columns}
+          data={items}
+          renderActions={() => <EditButton label="Update" />}
+        />
+      </PanelSection>
     </section>
   )
 }

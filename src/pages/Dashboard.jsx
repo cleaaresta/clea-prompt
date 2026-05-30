@@ -1,53 +1,68 @@
 import PageHeader from '../components/PageHeader'
+import { Button } from '../components/1-basic'
+import { StatCard } from '../components/3-data-display'
+import { DashboardSection, ChartSection } from '../components/6-section'
+import { ExportButton } from '../components/13-action'
+import { FadeIn, SlideUp } from '../components/15-animation'
+import { BarChart, DonutChart } from '../components/9-chart'
 
 export default function Dashboard() {
+  const salesData = [
+    { label: 'Mon', value: 420 },
+    { label: 'Tue', value: 380 },
+    { label: 'Wed', value: 510 },
+    { label: 'Thu', value: 460 },
+    { label: 'Fri', value: 620 },
+    { label: 'Sat', value: 780 },
+    { label: 'Sun', value: 540 },
+  ]
+
+  const categoryData = [
+    { label: 'Lips', value: 35 },
+    { label: 'Eyes', value: 28 },
+    { label: 'Face', value: 22 },
+    { label: 'Base', value: 15 },
+  ]
+
   return (
     <section>
-      <PageHeader
-        title="Dashboard Overview"
-        subtitle="Track revenue, sales, customers, and inventory performance."
+      <FadeIn>
+        <PageHeader
+          title="Dashboard Overview"
+          subtitle="Track revenue, sales, customers, and inventory performance."
+        />
+      </FadeIn>
+      <DashboardSection
+        note="Welcome back, manager! Berikut ringkasan performa toko makeupmu hari ini."
+        actions={
+          <>
+            <Button variant="primary" size="sm">New Sale</Button>
+            <ExportButton />
+          </>
+        }
       />
-      <div className="dashboard-top">
-        <div className="dashboard-intro">
-          <p className="dashboard-note">
-            Welcome back, manager! Berikut ringkasan performa toko makeupmu hari ini.
-          </p>
-        </div>
-        <div className="dashboard-cta">
-          <button className="button button-primary button-sm">New Sale</button>
-          <button className="button button-secondary button-sm">Export Report</button>
-        </div>
-      </div>
       <div className="dashboard-grid">
-        <article className="metric-card pink-card">
-          <p className="metric-label">Today’s Revenue</p>
-          <h2>$3,247</h2>
-          <p className="metric-note">+12% from yesterday</p>
-        </article>
-        <article className="metric-card purple-card">
-          <p className="metric-label">Sales Today</p>
-          <h2>24</h2>
-          <p className="metric-note">+8% from yesterday</p>
-        </article>
-        <article className="metric-card blue-card">
-          <p className="metric-label">Customers</p>
-          <h2>143</h2>
-          <p className="metric-note">+5% from last week</p>
-        </article>
-        <article className="metric-card gold-card">
-          <p className="metric-label">Avg. Order</p>
-          <h2>$135</h2>
-          <p className="metric-note">+3% from last week</p>
-        </article>
+        <SlideUp delay="0s">
+          <StatCard label="Today's Revenue" value="$3,247" note="+12% from yesterday" variant="pink" />
+        </SlideUp>
+        <SlideUp delay="0.1s">
+          <StatCard label="Sales Today" value="24" note="+8% from yesterday" variant="purple" />
+        </SlideUp>
+        <SlideUp delay="0.2s">
+          <StatCard label="Customers" value="143" note="+5% from last week" variant="blue" />
+        </SlideUp>
+        <SlideUp delay="0.3s">
+          <StatCard label="Avg. Order" value="$135" note="+3% from last week" variant="gold" />
+        </SlideUp>
       </div>
       <div className="dashboard-panels">
         <section className="panel">
           <div className="panel-title">Weekly Sales Trend</div>
-          <div className="chart-placeholder">Chart area</div>
+          <BarChart data={salesData} height={220} />
         </section>
         <section className="panel">
           <div className="panel-title">Sales by Category</div>
-          <div className="chart-placeholder">Pie chart area</div>
+          <DonutChart segments={categoryData} size={180} />
         </section>
       </div>
     </section>

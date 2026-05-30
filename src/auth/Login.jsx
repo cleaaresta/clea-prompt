@@ -1,6 +1,10 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { Button } from '../components/1-basic'
+import { Alert } from '../components/5-feedback'
+import { LoginForm, AuthBranding, PasswordField, AuthFooter } from '../components/8-auth'
+import { FadeIn } from '../components/15-animation'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -40,48 +44,46 @@ export default function Login() {
     }
   }
 
-  const loadingInfo = loading ? 'Sedang memproses login...' : null
-  const errorInfo = error ? error : null
-
   return (
-    <div className="login-page">
-      <div className="login-branding">
-        <div className="brand-logo-big">💄</div>
-        <h1>Glamour Studio</h1>
-        <p>Beauty POS admin login</p>
-      </div>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <label>
-          Username or Emaill
-          <input
-            name="username"
-            type="text"
-            placeholder="admin"
-            value={dataForm.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
+    <FadeIn>
+      <div className="login-page">
+        <AuthBranding
+          icon="💄"
+          title="Glamour Studio"
+          subtitle="Beauty POS admin login"
+        />
+        <LoginForm onSubmit={handleSubmit}>
+          <label>
+            Username or Email
+            <input
+              name="username"
+              type="text"
+              placeholder="admin"
+              value={dataForm.username}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <PasswordField
+            label="Password"
             name="password"
-            type="password"
             placeholder="Enter password"
             value={dataForm.password}
             onChange={handleChange}
             required
           />
-        </label>
-        <button type="submit" className="button button-primary" disabled={loading}>
-          {loading ? 'Loading...' : 'Sign In'}
-        </button>
-      </form>
-      {loadingInfo && <p className="login-info">{loadingInfo}</p>}
-      {errorInfo && <p className="login-error">{errorInfo}</p>}
-      <p className="login-note">
-        Not ready? <Link to="/admin" className="link-secondary">Go back to dashboard</Link>
-      </p>
-    </div>
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? 'Loading...' : 'Sign In'}
+          </Button>
+        </LoginForm>
+        {loading && <Alert variant="info">Sedang memproses login...</Alert>}
+        {error && <Alert variant="error">{error}</Alert>}
+        <AuthFooter
+          text="Not ready?"
+          linkText="Go back to dashboard"
+          linkTo="/admin"
+        />
+      </div>
+    </FadeIn>
   )
 }

@@ -1110,3 +1110,81 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ========== Animation Keyframes ========== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--slide-distance, 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 var(--glow-color, rgba(233, 93, 253, 0.3));
+  }
+  50% {
+    box-shadow: 0 0 20px 8px var(--glow-color, rgba(233, 93, 253, 0.3));
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========== Component Utilities ========== */
+
+.glamour-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.glamour-divider {
+  height: 1px;
+  background: #e8e1ec;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.glamour-divider-vertical {
+  width: 1px;
+  height: auto;
+  margin: 0 16px;
+}
+
+.glamour-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.glamour-image-rounded {
+  border-radius: 16px;
+}
