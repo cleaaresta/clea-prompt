@@ -1111,6 +1111,183 @@
   }
 }
 
+/* ========== Orders Page ========== */
+
+.orders-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.orders-summary-card {
+  border-radius: 24px;
+  padding: 24px;
+  color: white;
+  display: grid;
+  gap: 6px;
+  box-shadow: 0 16px 40px rgba(147, 87, 188, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.orders-summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(147, 87, 188, 0.2);
+}
+
+.orders-summary-all {
+  background: linear-gradient(135deg, #9b4bff, #6654ff);
+}
+
+.orders-summary-completed {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+.orders-summary-processing {
+  background: linear-gradient(135deg, #45c3f4, #3d6bf0);
+}
+
+.orders-summary-pending {
+  background: linear-gradient(135deg, #f5a92f, #ff7f2b);
+}
+
+.orders-summary-label {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.orders-summary-value {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.orders-summary-note {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.orders-panel {
+  overflow: hidden;
+}
+
+.orders-tabs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.orders-table-wrapper {
+  margin-top: 8px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e8e1ec;
+}
+
+.orders-view-btn {
+  padding: 6px 16px;
+  border: 1px solid #e8e1ec;
+  background: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #7b61c4;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.orders-view-btn:hover {
+  background: #f4efff;
+  border-color: #7b61c4;
+  transform: translateY(-1px);
+}
+
+.orders-status-badge {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.orders-status-completed {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.orders-status-processing {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.orders-status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.orders-status-cancelled {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.orders-dialog-body {
+  display: grid;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.orders-dialog-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orders-dialog-label {
+  color: #6f6480;
+  font-size: 0.92rem;
+}
+
+.orders-dialog-value {
+  font-weight: 600;
+  color: #2f233f;
+  font-size: 0.95rem;
+}
+
+.orders-dialog-divider {
+  height: 1px;
+  background: #e8e1ec;
+  margin: 4px 0;
+}
+
+.orders-dialog-total .orders-dialog-value {
+  font-size: 1.15rem;
+  color: #7b61c4;
+  font-weight: 700;
+}
+
+@media (max-width: 1080px) {
+  .orders-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .orders-tabs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .orders-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ========== Animation Keyframes ========== */
 
 @keyframes fadeIn {

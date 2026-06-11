@@ -8,6 +8,7 @@ import MakeSale from './pages/MakeSale'
 import Inventory from './pages/Inventory'
 import Customers from './pages/Customers'
 import Analytics from './pages/Analytics'
+import Orders from './pages/Orders'
 import Settings from './pages/Settings'
 import NotFound from './pages/NotFound'
 import './App.css'
@@ -36,6 +37,7 @@ function App() {
           <Route path="inventory" element={<Inventory />} />
           <Route path="customers" element={<Customers />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
