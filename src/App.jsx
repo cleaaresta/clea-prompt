@@ -10,6 +10,7 @@ import Customers from './pages/Customers'
 import Analytics from './pages/Analytics'
 import Orders from './pages/Orders'
 import Settings from './pages/Settings'
+import ReactHooks from './pages/ReactHooks'
 import NotFound from './pages/NotFound'
 import './App.css'
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="orders" element={<Orders />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="react-hooks" element={<ReactHooks />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

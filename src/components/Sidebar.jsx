@@ -8,7 +8,8 @@ const navItems = [
   { label: 'Customers', to: '/admin/customers', icon: '👥' },
   { label: 'Analytics', to: '/admin/analytics', icon: '📈' },
   { label: 'Orders', to: '/admin/orders', icon: '📋' },
-  { label: 'Settings', to: '/admin/settings', icon: '⚙️' }
+  { label: 'Settings', to: '/admin/settings', icon: '⚙️' },
+  { label: 'React Hooks', to: '/admin/react-hooks', icon: '🪝' }
 ]
 
 export default function Sidebar() {
