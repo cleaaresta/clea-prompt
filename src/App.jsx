@@ -11,10 +11,12 @@ import Analytics from './pages/Analytics'
 import Orders from './pages/Orders'
 import Settings from './pages/Settings'
 import ReactHooks from './pages/ReactHooks'
+import Users from './pages/Users'
 import NotFound from './pages/NotFound'
 import './App.css'
 
 const Login = lazy(() => import('./auth/Login'))
+const Register = lazy(() => import('./auth/Register'))
 
 function App() {
   return (
@@ -31,6 +33,16 @@ function App() {
             </Suspense>
           }
         />
+        <Route
+          path="/register"
+          element={
+            <Suspense fallback={<div className="loading-screen">Loading register...</div>}>
+              <AuthLayout>
+                <Register />
+              </AuthLayout>
+            </Suspense>
+          }
+        />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
@@ -41,6 +53,7 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="settings" element={<Settings />} />
           <Route path="react-hooks" element={<ReactHooks />} />
+          <Route path="users" element={<Users />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

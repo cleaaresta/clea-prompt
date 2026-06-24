@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { supabase } from '../lib/supabaseClient'
 import { Button } from '../components/1-basic'
 import { Alert } from '../components/5-feedback'
 import { LoginForm, AuthBranding, PasswordField, AuthFooter } from '../components/8-auth'
@@ -10,7 +10,16 @@ export default function Login() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [dataForm, setDataForm] = useState({ username: '', password: '' })
+  const [success, setSuccess] = useState('')
+  const [dataForm, setDataForm] = useState({ email: '', password: '' })
+  const [searchParams] = useSearchParams()
+
+  // Tampilkan pesan sukses jika datang dari halaman registrasi
+  useEffect(() => {
+    if (searchParams.get('registered') === 'true') {
+      setSuccess('Pendaftaran berhasil! Silakan login dengan akun baru Anda.')
+    }
+  }, [searchParams])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -23,22 +32,34 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
+    setSuccess('')
     setLoading(true)
 
     try {
-      const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
-        username: dataForm.username,
-        password: dataForm.password
-      })
+      // Query langsung ke tabel users berdasarkan email dan password
+      const { data, error: queryError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', dataForm.email)
+        .eq('password', dataForm.password)
+        .single()
 
-      if (response.status === 201) {
-        navigate('/admin', { replace: true })
-      } else {
-        setError('Login gagal, coba lagi.')
+      if (queryError || !data) {
+        setError('Email atau password salah.')
+        return
       }
+
+      // Simpan info user ke localStorage untuk keperluan UI
+      localStorage.setItem('user_profile', JSON.stringify({
+        id: data.id,
+        email: data.email,
+        name: data.name,
+        role: data.role,
+      }))
+
+      navigate('/admin', { replace: true })
     } catch (err) {
-      const message = err.response?.data?.error || 'Terjadi kesalahan saat login.'
-      setError(message)
+      setError('Terjadi kesalahan saat login. Silakan coba lagi.')
     } finally {
       setLoading(false)
     }
@@ -52,14 +73,15 @@ export default function Login() {
           title="Glamour Studio"
           subtitle="Beauty POS admin login"
         />
+        {success && <Alert variant="success">{success}</Alert>}
         <LoginForm onSubmit={handleSubmit}>
           <label>
-            Username or Email
+            Email
             <input
-              name="username"
-              type="text"
-              placeholder="admin"
-              value={dataForm.username}
+              name="email"
+              type="email"
+              placeholder="you@example.com"
+              value={dataForm.email}
               onChange={handleChange}
               required
             />
@@ -79,9 +101,9 @@ export default function Login() {
         {loading && <Alert variant="info">Sedang memproses login...</Alert>}
         {error && <Alert variant="error">{error}</Alert>}
         <AuthFooter
-          text="Not ready?"
-          linkText="Go back to dashboard"
-          linkTo="/admin"
+          text="Belum punya akun?"
+          linkText="Daftar di sini"
+          linkTo="/register"
         />
       </div>
     </FadeIn>
