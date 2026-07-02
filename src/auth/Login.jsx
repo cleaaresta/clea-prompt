@@ -20,10 +20,16 @@ export default function Login() {
   const [dataForm, setDataForm] = useState({ email: "", password: "" });
   const [searchParams] = useSearchParams();
 
-  // Tampilkan pesan sukses jika datang dari halaman registrasi
+  // Tampilkan pesan sukses atau pesan redirect dari guest CTA
   useEffect(() => {
     if (searchParams.get("registered") === "true") {
       setSuccess("Pendaftaran berhasil! Silakan login dengan akun baru Anda.");
+      return;
+    }
+
+    const message = searchParams.get("message");
+    if (message) {
+      setSuccess(decodeURIComponent(message));
     }
   }, [searchParams]);
 

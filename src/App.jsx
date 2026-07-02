@@ -15,34 +15,20 @@ import Settings from "./pages/Settings";
 import ReactHooks from "./pages/ReactHooks";
 import Users from "./pages/Users";
 import MemberDashboard from "./pages/MemberDashboard";
+import ProductCatalog from "./pages/ProductCatalog";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 
 const Login = lazy(() => import("./auth/Login"));
 const Register = lazy(() => import("./auth/Register"));
 
-function RootRedirect() {
-  const { session, profile, loading } = useAuth();
-
-  if (loading) {
-    return <div className="loading-screen">Loading account...</div>;
-  }
-
-  if (!session || !profile) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return (
-    <Navigate to={profile.role === "admin" ? "/admin" : "/member"} replace />
-  );
-}
-
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<RootRedirect />} />
+          <Route path="/" element={<ProductCatalog />} />
+          <Route path="/shop" element={<ProductCatalog />} />
           <Route
             path="/login"
             element={
