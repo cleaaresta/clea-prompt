@@ -1,69 +1,65 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
-import { Button } from '../components/1-basic'
-import { Alert } from '../components/5-feedback'
-import { LoginForm, AuthBranding, PasswordField, AuthFooter } from '../components/8-auth'
-import { FadeIn } from '../components/15-animation'
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Button } from "../components/1-basic";
+import { Alert } from "../components/5-feedback";
+import {
+  LoginForm,
+  AuthBranding,
+  PasswordField,
+  AuthFooter,
+} from "../components/8-auth";
+import { FadeIn } from "../components/15-animation";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const [dataForm, setDataForm] = useState({ email: '', password: '' })
-  const [searchParams] = useSearchParams()
+  const navigate = useNavigate();
+  const { signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [dataForm, setDataForm] = useState({ email: "", password: "" });
+  const [searchParams] = useSearchParams();
 
   // Tampilkan pesan sukses jika datang dari halaman registrasi
   useEffect(() => {
-    if (searchParams.get('registered') === 'true') {
-      setSuccess('Pendaftaran berhasil! Silakan login dengan akun baru Anda.')
+    if (searchParams.get("registered") === "true") {
+      setSuccess("Pendaftaran berhasil! Silakan login dengan akun baru Anda.");
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setDataForm((prevState) => ({
       ...prevState,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
-    setSuccess('')
-    setLoading(true)
+    event.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
     try {
-      // Query langsung ke tabel users berdasarkan email dan password
-      const { data, error: queryError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', dataForm.email)
-        .eq('password', dataForm.password)
-        .single()
+      const { profile } = await signIn(dataForm.email, dataForm.password);
 
-      if (queryError || !data) {
-        setError('Email atau password salah.')
-        return
+      if (!profile) {
+        setError("Email atau password salah.");
+        return;
       }
 
-      // Simpan info user ke localStorage untuk keperluan UI
-      localStorage.setItem('user_profile', JSON.stringify({
-        id: data.id,
-        email: data.email,
-        name: data.name,
-        role: data.role,
-      }))
-
-      navigate('/admin', { replace: true })
+      navigate(profile.role === "admin" ? "/admin" : "/member", {
+        replace: true,
+      });
     } catch (err) {
-      setError('Terjadi kesalahan saat login. Silakan coba lagi.')
+      setError(
+        err.message || "Terjadi kesalahan saat login. Silakan coba lagi.",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <FadeIn>
@@ -95,7 +91,7 @@ export default function Login() {
             required
           />
           <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Loading...' : 'Sign In'}
+            {loading ? "Loading..." : "Sign In"}
           </Button>
         </LoginForm>
         {loading && <Alert variant="info">Sedang memproses login...</Alert>}
@@ -107,5 +103,5 @@ export default function Login() {
         />
       </div>
     </FadeIn>
-  )
+  );
 }

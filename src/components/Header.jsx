@@ -1,29 +1,32 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Header() {
-  const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [profileDropdown, setProfileDropdown] = useState(false)
+  const navigate = useNavigate();
+  const { profile, signOut } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileDropdown, setProfileDropdown] = useState(false);
 
-  const handleLogout = () => {
-    navigate('/login', { replace: true })
-  }
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/login", { replace: true });
+  };
 
   const handleSearch = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery)
-      setSearchQuery('')
+      console.log("Searching for:", searchQuery);
+      setSearchQuery("");
     }
-  }
+  };
 
   return (
     <header className="header-bar">
       <div className="header-left">
-        <button 
-          type="button" 
+        <button
+          type="button"
           className="hamburger-menu"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
@@ -37,30 +40,40 @@ export default function Header() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
           />
-          <button type="submit" className="search-button">🔍</button>
+          <button type="submit" className="search-button">
+            🔍
+          </button>
         </form>
       </div>
       <div className="header-right">
         <div className="profile-section">
-          <button 
+          <button
             type="button"
             className="profile-button"
             onClick={() => setProfileDropdown(!profileDropdown)}
           >
             <div className="profile-avatar">👤</div>
             <div className="profile-info">
-              <p className="profile-name">Admin</p>
-              <p className="profile-role">Administrator</p>
+              <p className="profile-name">{profile?.full_name || "Member"}</p>
+              <p className="profile-role">
+                {profile?.role === "admin" ? "Administrator" : "Member"}
+              </p>
             </div>
             <span className="dropdown-arrow">▼</span>
           </button>
           {profileDropdown && (
             <div className="profile-dropdown">
-              <a href="#" className="dropdown-item">Profile Settings</a>
-              <a href="#" className="dropdown-item">Account</a>
-              <a href="#" className="dropdown-item">Preferences</a>
+              <a href="#" className="dropdown-item">
+                Profile Settings
+              </a>
+              <a href="#" className="dropdown-item">
+                Account
+              </a>
+              <a href="#" className="dropdown-item">
+                Preferences
+              </a>
               <div className="dropdown-divider"></div>
-              <button 
+              <button
                 type="button"
                 className="dropdown-item logout-item"
                 onClick={handleLogout}
@@ -72,5 +85,5 @@ export default function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }

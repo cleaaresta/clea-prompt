@@ -1,19 +1,35 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const navItems = [
-  { label: 'Dashboard', to: '/admin', icon: '📊' },
-  { label: 'Products', to: '/admin/products', icon: '💄' },
-  { label: 'Make Sale', to: '/admin/make-sale', icon: '🛒' },
-  { label: 'Inventory', to: '/admin/inventory', icon: '📦' },
-  { label: 'Customers', to: '/admin/customers', icon: '👥' },
-  { label: 'Analytics', to: '/admin/analytics', icon: '📈' },
-  { label: 'Orders', to: '/admin/orders', icon: '📋' },
-  { label: 'Users', to: '/admin/users', icon: '🔐' },
-  { label: 'Settings', to: '/admin/settings', icon: '⚙️' },
-  { label: 'React Hooks', to: '/admin/react-hooks', icon: '🪝' }
-]
+const adminNavItems = [
+  { label: "Dashboard", to: "/admin", icon: "📊" },
+  { label: "Products", to: "/admin/products", icon: "💄" },
+  { label: "Make Sale", to: "/admin/make-sale", icon: "🛒" },
+  { label: "Inventory", to: "/admin/inventory", icon: "📦" },
+  { label: "Customers", to: "/admin/customers", icon: "👥" },
+  { label: "Analytics", to: "/admin/analytics", icon: "📈" },
+  { label: "Orders", to: "/admin/orders", icon: "📋" },
+  { label: "Users", to: "/admin/users", icon: "🔐" },
+  { label: "Settings", to: "/admin/settings", icon: "⚙️" },
+  { label: "React Hooks", to: "/admin/react-hooks", icon: "🪝" },
+];
+
+const memberNavItems = [
+  { label: "Member Dashboard", to: "/member", icon: "📋" },
+];
 
 export default function Sidebar() {
+  const { profile, signOut } = useAuth();
+  const navItems = profile?.role
+    ? profile.role === "member"
+      ? memberNavItems
+      : adminNavItems
+    : [];
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return (
     <aside className="sidebar">
       <div className="brand-card">
@@ -29,9 +45,9 @@ export default function Sidebar() {
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === '/admin'}
+            end={item.to === "/admin"}
             className={({ isActive }) =>
-              isActive ? 'nav-link active' : 'nav-link'
+              isActive ? "nav-link active" : "nav-link"
             }
           >
             <span className="nav-icon">{item.icon}</span>
@@ -40,10 +56,14 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="sidebar-footer">
-        <Link to="/login" className="button button-secondary logout-button">
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="button button-secondary logout-button"
+        >
           Logout
-        </Link>
+        </button>
       </div>
     </aside>
-  )
+  );
 }

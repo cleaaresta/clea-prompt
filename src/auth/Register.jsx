@@ -1,85 +1,72 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { supabase } from '../lib/supabaseClient'
-import { Button } from '../components/1-basic'
-import { Alert } from '../components/5-feedback'
-import { LoginForm, AuthBranding, PasswordField, AuthFooter } from '../components/8-auth'
-import { FadeIn } from '../components/15-animation'
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/1-basic";
+import { Alert } from "../components/5-feedback";
+import {
+  LoginForm,
+  AuthBranding,
+  PasswordField,
+  AuthFooter,
+} from "../components/8-auth";
+import { FadeIn } from "../components/15-animation";
+import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [dataForm, setDataForm] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  })
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setDataForm((prevState) => ({
       ...prevState,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setError('')
+    event.preventDefault();
+    setError("");
 
     // Validasi password match
     if (dataForm.password !== dataForm.confirmPassword) {
-      setError('Password dan konfirmasi password tidak cocok.')
-      return
+      setError("Password dan konfirmasi password tidak cocok.");
+      return;
     }
 
     // Validasi panjang password
     if (dataForm.password.length < 6) {
-      setError('Password minimal 6 karakter.')
-      return
+      setError("Password minimal 6 karakter.");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      // Cek apakah email sudah terdaftar
-      const { data: existing } = await supabase
-        .from('users')
-        .select('id')
-        .eq('email', dataForm.email)
-        .single()
+      const { user } = await signUp(
+        dataForm.email,
+        dataForm.password,
+        dataForm.name,
+      );
 
-      if (existing) {
-        setError('Email sudah terdaftar. Silakan gunakan email lain.')
-        setLoading(false)
-        return
+      if (user) {
+        navigate("/login?registered=true", { replace: true });
       }
-
-      // Insert user baru langsung ke tabel users
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({
-          name: dataForm.name,
-          email: dataForm.email,
-          password: dataForm.password,
-          role: 'user'
-        })
-
-      if (insertError) {
-        setError('Gagal mendaftar: ' + insertError.message)
-        return
-      }
-
-      // Redirect ke login dengan pesan sukses
-      navigate('/login?registered=true', { replace: true })
     } catch (err) {
-      setError('Terjadi kesalahan saat mendaftar. Silakan coba lagi.')
+      setError(
+        err.message || "Terjadi kesalahan saat mendaftar. Silakan coba lagi.",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <FadeIn>
@@ -129,10 +116,12 @@ export default function Register() {
             required
           />
           <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Mendaftar...' : 'Daftar Sekarang'}
+            {loading ? "Mendaftar..." : "Daftar Sekarang"}
           </Button>
         </LoginForm>
-        {loading && <Alert variant="info">Sedang memproses pendaftaran...</Alert>}
+        {loading && (
+          <Alert variant="info">Sedang memproses pendaftaran...</Alert>
+        )}
         {error && <Alert variant="error">{error}</Alert>}
         <AuthFooter
           text="Sudah punya akun?"
@@ -141,5 +130,5 @@ export default function Register() {
         />
       </div>
     </FadeIn>
-  )
+  );
 }
