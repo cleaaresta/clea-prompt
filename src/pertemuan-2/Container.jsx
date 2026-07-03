@@ -6,7 +6,7 @@ export default function Container({children}){
                 {children}
             <br/>
             <footer>
-                <p>2025 - PCR</p>
+                <p>2025 - Politeknik Caltex Riau</p>
             </footer>
         </div>
     )
