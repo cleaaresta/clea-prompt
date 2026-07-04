@@ -72,9 +72,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["member"]} />}>
-            <Route path="/member" element={<AdminLayout />}>
-              <Route index element={<MemberDashboard />} />
-            </Route>
+            <Route path="/member" element={<MemberDashboard />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
