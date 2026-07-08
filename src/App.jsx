@@ -14,7 +14,7 @@ import Orders from "./pages/Orders";
 import Settings from "./pages/Settings";
 import ReactHooks from "./pages/ReactHooks";
 import Users from "./pages/Users";
-import MemberDashboard from "./pages/MemberDashboard";
+import MemberPage from "./pages/MemberPage";
 import ProductCatalog from "./pages/ProductCatalog";
 import NotFound from "./pages/NotFound";
 import "./App.css";
@@ -72,7 +72,7 @@ function App() {
             </Route>
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["member"]} />}>
-            <Route path="/member" element={<MemberDashboard />} />
+            <Route path="/member" element={<MemberPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
