@@ -1,259 +1,48 @@
-import { useEffect, useMemo, useState } from "react";
-import { PageHeaderSection } from "../components/6-section";
-import { FadeIn, SlideUp } from "../components/15-animation";
-import { supabase } from "../lib/supabaseClient";
+import { useState } from 'react'
+import { PageHeaderSection, PanelSection } from '../components/6-section'
+import { FadeIn, SlideUp } from '../components/15-animation'
+import { Table } from '../components/3-data-display'
+import { Modal } from '../components/5-feedback'
+import { Button } from '../components/1-basic'
 
-// Shadcn UI Components
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "../components/ui/tabs";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "../components/ui/table";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "../components/ui/dialog";
-import { Button } from "../components/ui/button";
-
-function StatusBadge({ status }) {
-  const styles = {
-    completed: "orders-status-completed",
-    processing: "orders-status-processing",
-    pending: "orders-status-pending",
-    cancelled: "orders-status-cancelled",
-  };
-  return (
-    <span className={`orders-status-badge ${styles[status] || ""}`}>
-      {status}
-    </span>
-  );
-}
-
-function OrderDetailDialog({ order }) {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="orders-view-btn">View</button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Order {order.id.slice(0, 8)}</DialogTitle>
-          <DialogDescription>
-            Detail order dari {order.profiles?.full_name || "Customer"}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="orders-dialog-body">
-          <div className="orders-dialog-row">
-            <span className="orders-dialog-label">Customer</span>
-            <span className="orders-dialog-value">
-              {order.profiles?.full_name || "Customer"}
-            </span>
-          </div>
-          <div className="orders-dialog-row">
-            <span className="orders-dialog-label">Date</span>
-            <span className="orders-dialog-value">
-              {new Date(order.created_at).toLocaleDateString()}
-            </span>
-          </div>
-          <div className="orders-dialog-row">
-            <span className="orders-dialog-label">Items</span>
-            <span className="orders-dialog-value">
-              {order.order_items?.length || 0} products
-            </span>
-          </div>
-          <div className="orders-dialog-row">
-            <span className="orders-dialog-label">Status</span>
-            <StatusBadge status={order.status} />
-          </div>
-          <div className="orders-dialog-divider" />
-          <div className="orders-dialog-row orders-dialog-total">
-            <span className="orders-dialog-label">Total</span>
-            <span className="orders-dialog-value">
-              Rp {Number(order.total_amount).toLocaleString("id-ID")}
-            </span>
-          </div>
-        </div>
-        <DialogFooter showCloseButton>
-          <Button variant="default" size="sm">
-            Print Receipt
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function OrdersTable({ orders, onStatusChange }) {
-  return (
-    <div className="orders-table-wrapper">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-center">Items</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-center">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={7}
-                className="text-center py-8 text-muted-foreground"
-              >
-                No orders found for this filter.
-              </TableCell>
-            </TableRow>
-          ) : (
-            orders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-semibold text-primary">
-                  {order.id.slice(0, 8)}
-                </TableCell>
-                <TableCell>{order.profiles?.full_name || "Customer"}</TableCell>
-                <TableCell className="text-muted-foreground">
-                  {new Date(order.created_at).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="text-center">
-                  {order.order_items?.length || 0}
-                </TableCell>
-                <TableCell className="font-semibold">
-                  Rp {Number(order.total_amount).toLocaleString("id-ID")}
-                </TableCell>
-                <TableCell>
-                  <select
-                    value={order.status}
-                    onChange={(event) =>
-                      onStatusChange(order.id, event.target.value)
-                    }
-                    className="rounded-md border border-stone-300 bg-white px-2 py-1 text-sm"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </TableCell>
-                <TableCell className="text-center">
-                  <OrderDetailDialog order={order} />
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
+const dummyOrders = [
+  { id: 'ORD-1001', customer: 'Budi Santoso', date: '2023-10-25', items: 3, total: 450000, status: 'Completed' },
+  { id: 'ORD-1002', customer: 'Siti Aminah', date: '2023-10-26', items: 1, total: 120000, status: 'Pending' },
+  { id: 'ORD-1003', customer: 'Andi Wijaya', date: '2023-10-27', items: 5, total: 850000, status: 'Completed' },
+  { id: 'ORD-1004', customer: 'Rina Melati', date: '2023-10-28', items: 2, total: 340000, status: 'Pending' },
+  { id: 'ORD-1005', customer: 'Dewi Lestari', date: '2023-10-29', items: 4, total: 600000, status: 'Completed' },
+]
 
 export default function Orders() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState(dummyOrders)
+  const [viewingOrder, setViewingOrder] = useState(null)
 
-  const loadOrders = async () => {
-    const { data, error } = await supabase
-      .from("orders")
-      .select(
-        "*, profiles(full_name), order_items(quantity, price_at_purchase, product_id)",
-      )
-      .order("created_at", { ascending: false });
+  const columns = [
+    { key: 'id', label: 'Order ID', cellClassName: 'font-semibold text-stone-700' },
+    { key: 'customer', label: 'Customer' },
+    { key: 'date', label: 'Date', cellClassName: 'text-stone-500' },
+    { key: 'items', label: 'Items', cellClassName: 'text-center' },
+    {
+      key: 'total',
+      label: 'Total',
+      render: (val) => `Rp ${Number(val).toLocaleString('id-ID')}`,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (val) => (
+        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+          val === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+        }`}>
+          {val}
+        </span>
+      ),
+    },
+  ]
 
-    if (!error) {
-      setOrders(data || []);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    const fetchOrders = async () => {
-      await loadOrders();
-    };
-
-    fetchOrders();
-  }, []);
-
-  const handleStatusChange = async (orderId, nextStatus) => {
-    const currentOrder = orders.find((order) => order.id === orderId);
-    if (!currentOrder) return;
-
-    if (currentOrder.status === nextStatus) return;
-
-    const updates = { status: nextStatus };
-    if (nextStatus === "completed") {
-      const pointsEarned = Math.floor(
-        Number(currentOrder.total_amount) / 10000,
-      );
-      updates.points_earned = pointsEarned;
-      const { data: profileData, error: profileError } = await supabase
-        .from("profiles")
-        .select("id, total_points, tier")
-        .eq("id", currentOrder.user_id)
-        .maybeSingle();
-
-      if (!profileError && profileData) {
-        const newTotalPoints =
-          Number(profileData.total_points || 0) + pointsEarned;
-        const nextTier =
-          newTotalPoints >= 1500
-            ? "gold"
-            : newTotalPoints >= 500
-              ? "silver"
-              : "bronze";
-        await supabase
-          .from("profiles")
-          .update({ total_points: newTotalPoints, tier: nextTier })
-          .eq("id", currentOrder.user_id);
-      }
-    }
-
-    const { error } = await supabase
-      .from("orders")
-      .update(updates)
-      .eq("id", orderId);
-    if (!error) {
-      setOrders((current) =>
-        current.map((order) =>
-          order.id === orderId
-            ? {
-                ...order,
-                status: nextStatus,
-                points_earned: updates.points_earned ?? order.points_earned,
-              }
-            : order,
-        ),
-      );
-    }
-  };
-
-  const completedOrders = useMemo(
-    () => orders.filter((order) => order.status === "completed"),
-    [orders],
-  );
-  const pendingOrders = useMemo(
-    () => orders.filter((order) => order.status === "pending"),
-    [orders],
-  );
-  const cancelledOrders = useMemo(
-    () => orders.filter((order) => order.status === "cancelled"),
-    [orders],
-  );
+  const totalOrders = orders.length
+  const completedOrders = orders.filter(o => o.status === 'Completed').length
+  const pendingOrders = orders.filter(o => o.status === 'Pending').length
 
   return (
     <section>
@@ -265,93 +54,79 @@ export default function Orders() {
       </FadeIn>
 
       <SlideUp delay="0s">
-        <div className="orders-summary-grid">
-          <div className="orders-summary-card orders-summary-all">
-            <p className="orders-summary-label">Total Orders</p>
-            <h2 className="orders-summary-value">{orders.length}</h2>
-            <p className="orders-summary-note">All time</p>
+        <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', marginBottom: '24px' }}>
+          <div className="metric-card pink-card">
+            <h3 className="metric-label">Total Orders</h3>
+            <h2>{totalOrders}</h2>
+            <p className="metric-note">All time</p>
           </div>
-          <div className="orders-summary-card orders-summary-completed">
-            <p className="orders-summary-label">Completed</p>
-            <h2 className="orders-summary-value">{completedOrders.length}</h2>
-            <p className="orders-summary-note">Successfully fulfilled</p>
+          <div className="metric-card purple-card">
+            <h3 className="metric-label">Completed</h3>
+            <h2>{completedOrders}</h2>
+            <p className="metric-note">Successfully fulfilled</p>
           </div>
-          <div className="orders-summary-card orders-summary-pending">
-            <p className="orders-summary-label">Pending</p>
-            <h2 className="orders-summary-value">{pendingOrders.length}</h2>
-            <p className="orders-summary-note">Awaiting confirmation</p>
-          </div>
-          <div className="orders-summary-card orders-summary-cancelled">
-            <p className="orders-summary-label">Cancelled</p>
-            <h2 className="orders-summary-value">{cancelledOrders.length}</h2>
-            <p className="orders-summary-note">Rejected or voided</p>
+          <div className="metric-card gold-card">
+            <h3 className="metric-label">Pending</h3>
+            <h2>{pendingOrders}</h2>
+            <p className="metric-note">Awaiting confirmation</p>
           </div>
         </div>
       </SlideUp>
 
       <SlideUp delay="0.1s">
-        <div className="panel orders-panel">
-          <Tabs defaultValue="all">
-            <div className="orders-tabs-header">
-              <h3 className="panel-title" style={{ margin: 0 }}>
-                Order List
-              </h3>
-              <TabsList>
-                <TabsTrigger value="all">All ({orders.length})</TabsTrigger>
-                <TabsTrigger value="completed">
-                  Completed ({completedOrders.length})
-                </TabsTrigger>
-                <TabsTrigger value="pending">
-                  Pending ({pendingOrders.length})
-                </TabsTrigger>
-                <TabsTrigger value="cancelled">
-                  Cancelled ({cancelledOrders.length})
-                </TabsTrigger>
-              </TabsList>
-            </div>
-            <TabsContent value="all">
-              {loading ? (
-                <p className="p-4 text-sm text-stone-500">Loading orders...</p>
-              ) : (
-                <OrdersTable
-                  orders={orders}
-                  onStatusChange={handleStatusChange}
-                />
-              )}
-            </TabsContent>
-            <TabsContent value="completed">
-              {loading ? (
-                <p className="p-4 text-sm text-stone-500">Loading orders...</p>
-              ) : (
-                <OrdersTable
-                  orders={completedOrders}
-                  onStatusChange={handleStatusChange}
-                />
-              )}
-            </TabsContent>
-            <TabsContent value="pending">
-              {loading ? (
-                <p className="p-4 text-sm text-stone-500">Loading orders...</p>
-              ) : (
-                <OrdersTable
-                  orders={pendingOrders}
-                  onStatusChange={handleStatusChange}
-                />
-              )}
-            </TabsContent>
-            <TabsContent value="cancelled">
-              {loading ? (
-                <p className="p-4 text-sm text-stone-500">Loading orders...</p>
-              ) : (
-                <OrdersTable
-                  orders={cancelledOrders}
-                  onStatusChange={handleStatusChange}
-                />
-              )}
-            </TabsContent>
-          </Tabs>
-        </div>
+        <PanelSection title="Order List">
+          <Table
+            columns={columns}
+            data={orders}
+            renderActions={(row) => (
+              <button
+                className="btn-small view"
+                onClick={() => setViewingOrder(row)}
+              >
+                View
+              </button>
+            )}
+          />
+        </PanelSection>
       </SlideUp>
+
+      <Modal
+        isOpen={viewingOrder !== null}
+        onClose={() => setViewingOrder(null)}
+        title={`Order Details - ${viewingOrder?.id}`}
+      >
+        {viewingOrder && (
+          <div className="space-y-4 pt-2">
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <span className="block text-stone-500">Customer</span>
+                <span className="font-medium text-stone-800">{viewingOrder.customer}</span>
+              </div>
+              <div>
+                <span className="block text-stone-500">Date</span>
+                <span className="font-medium text-stone-800">{viewingOrder.date}</span>
+              </div>
+              <div>
+                <span className="block text-stone-500">Total Items</span>
+                <span className="font-medium text-stone-800">{viewingOrder.items} products</span>
+              </div>
+              <div>
+                <span className="block text-stone-500">Status</span>
+                <span className="font-medium text-stone-800">{viewingOrder.status}</span>
+              </div>
+            </div>
+            <div className="border-t border-stone-200 mt-4 pt-4">
+              <div className="flex justify-between font-semibold text-lg">
+                <span>Total</span>
+                <span>Rp {Number(viewingOrder.total).toLocaleString('id-ID')}</span>
+              </div>
+            </div>
+            <div className="pt-4 border-t border-stone-200 mt-4 flex gap-2">
+              <Button variant="primary" onClick={() => setViewingOrder(null)}>Close</Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </section>
-  );
+  )
 }

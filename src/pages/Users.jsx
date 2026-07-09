@@ -205,8 +205,18 @@ export default function Users() {
     <section>
       <FadeIn>
         <PageHeaderSection
-          title="Manajemen User"
-          subtitle="Kelola data user, tambah, edit, dan hapus user yang terdaftar."
+          title="Users"
+          subtitle="Kelola data user yang terdaftar di sistem"
+          action={
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <Button variant="outline" onClick={fetchUsers} style={{ padding: '6px 12px', fontSize: '0.85rem', backgroundColor: 'transparent' }}>
+                <span style={{ marginRight: '6px' }}>↻</span> Refresh
+              </Button>
+              <Button variant="primary" onClick={handleAdd} style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
+                + Tambah User
+              </Button>
+            </div>
+          }
         />
       </FadeIn>
 
@@ -221,14 +231,7 @@ export default function Users() {
         </div>
       )}
 
-      <PanelSection
-        title="Daftar User"
-        headerAction={
-          <Button variant="primary" size="sm" onClick={handleAdd}>
-            + Tambah User
-          </Button>
-        }
-      >
+      <PanelSection title="Daftar User">
         {loading ? (
           <div className="users-loading">
             <div className="users-loading-spinner" />

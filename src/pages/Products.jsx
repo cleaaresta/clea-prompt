@@ -4,7 +4,7 @@ import { Table } from "../components/3-data-display";
 import { PageHeaderSection, PanelSection } from "../components/6-section";
 import { FadeIn } from "../components/15-animation";
 import { supabase } from "../lib/supabaseClient";
-import { Alert } from "../components/5-feedback";
+import { Alert, Modal } from "../components/5-feedback";
 
 const DEFAULT_PRODUCT_IMAGE =
   "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80";
@@ -18,6 +18,8 @@ export default function Products() {
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
   const loadProducts = async () => {
     setLoading(true);
@@ -52,7 +54,6 @@ export default function Products() {
       const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
       const filePath = `images/${fileName}`;
 
-      // Try uploading to Supabase Storage bucket 'product-images'
       const { error: uploadError } = await supabase.storage
         .from("product-images")
         .upload(filePath, file, {
@@ -64,7 +65,6 @@ export default function Products() {
         throw uploadError;
       }
 
-      // Get public URL if storage upload succeeded
       const { data: { publicUrl } } = supabase.storage
         .from("product-images")
         .getPublicUrl(filePath);
@@ -73,8 +73,6 @@ export default function Products() {
       setMessage("Gambar berhasil diunggah ke storage.");
     } catch (error) {
       console.warn("Storage upload failed, falling back to base64 conversion:", error.message);
-
-      // Fallback: convert file to Base64 so it can store directly in the database
       const reader = new FileReader();
       reader.onloadend = () => {
         setFormData((current) => ({ ...current, image_url: reader.result }));
@@ -82,10 +80,29 @@ export default function Products() {
         setUploading(false);
       };
       reader.readAsDataURL(file);
-      return; // Return early, setUploading(false) is handled in reader.onloadend
+      return;
     }
-
     setUploading(false);
+  };
+
+  const handleAdd = () => {
+    setEditingId(null);
+    setFormData(emptyForm);
+    setModalOpen(true);
+    setMessage("");
+  };
+
+  const handleEdit = (product) => {
+    setEditingId(product.id);
+    setFormData({
+      name: product.name,
+      description: product.description || "",
+      price: product.price,
+      stock: product.stock,
+      image_url: product.image_url || "",
+    });
+    setModalOpen(true);
+    setMessage("");
   };
 
   const handleSubmit = async (event) => {
@@ -119,24 +136,15 @@ export default function Products() {
 
     setFormData(emptyForm);
     setEditingId(null);
+    setModalOpen(false);
     await loadProducts();
-  };
-
-  const handleEdit = (product) => {
-    setEditingId(product.id);
-    setFormData({
-      name: product.name,
-      description: product.description || "",
-      price: product.price,
-      stock: product.stock,
-      image_url: product.image_url || "",
-    });
   };
 
   const handleDelete = async (id) => {
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (!error) {
       setMessage("Produk berhasil dihapus.");
+      setDeleteConfirmId(null);
       await loadProducts();
     }
   };
@@ -180,6 +188,15 @@ export default function Products() {
         <PageHeaderSection
           title="Products"
           subtitle="Manage makeup products, variants, and pricing."
+          action={
+            <Button
+              variant="primary"
+              onClick={handleAdd}
+              style={{ padding: '8px 20px', fontSize: '0.875rem', borderRadius: '9999px', backgroundColor: '#9a475d', border: 'none', color: '#fff' }}
+            >
+              + Add Product
+            </Button>
+          }
         />
       </FadeIn>
       {message ? (
@@ -188,9 +205,40 @@ export default function Products() {
         </Alert>
       ) : null}
       <PanelSection title="All Products">
+        {loading ? (
+          <p className="text-sm text-stone-500">Memuat produk...</p>
+        ) : (
+          <Table
+            columns={columns}
+            data={products}
+            renderActions={(row) => (
+              <>
+                <button
+                  className="btn-small view"
+                  onClick={() => handleEdit(row)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn-small delete"
+                  onClick={() => setDeleteConfirmId(row.id)}
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          />
+        )}
+      </PanelSection>
+
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingId ? "Edit Produk" : "Tambah Produk Baru"}
+      >
         <form
           onSubmit={handleSubmit}
-          className="mb-6 space-y-3 rounded-xl border border-stone-200 bg-stone-50 p-4 shadow-sm"
+          className="space-y-4 pt-2"
         >
           <div className="grid gap-3 md:grid-cols-2">
             <label className="text-sm font-medium text-stone-700">
@@ -278,49 +326,51 @@ export default function Products() {
               </div>
             </div>
           </div>
-          <div className="pt-2">
-            <Button variant="primary" size="sm" type="submit">
-              {editingId ? "Update Produk" : "+ Add Product"}
+          <div className="pt-4 border-t border-stone-200 mt-4 flex gap-2">
+            <Button variant="primary" type="submit">
+              {editingId ? "Update Produk" : "+ Tambah Produk"}
             </Button>
-            {editingId && (
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData(emptyForm);
-                  setEditingId(null);
-                }}
-                className="ml-2 text-xs text-stone-500 hover:text-stone-700"
-              >
-                Batal
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                setFormData(emptyForm);
+                setEditingId(null);
+                setModalOpen(false);
+              }}
+              className="text-sm text-stone-600 hover:text-stone-900 px-4 py-2"
+            >
+              Batal
+            </button>
           </div>
         </form>
-        {loading ? (
-          <p className="text-sm text-stone-500">Memuat produk...</p>
-        ) : (
-          <Table
-            columns={columns}
-            data={products}
-            renderActions={(row) => (
-              <>
-                <button
-                  className="btn-small view"
-                  onClick={() => handleEdit(row)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="btn-small delete"
-                  onClick={() => handleDelete(row.id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          />
-        )}
-      </PanelSection>
+      </Modal>
+      <Modal
+        isOpen={deleteConfirmId !== null}
+        onClose={() => setDeleteConfirmId(null)}
+        title="Confirm Deletion"
+      >
+        <div className="space-y-4 pt-2">
+          <p className="text-sm text-stone-600">
+            Are you sure you want to delete this product? This action cannot be undone.
+          </p>
+          <div className="pt-4 border-t border-stone-200 mt-4 flex gap-2">
+            <Button
+              variant="primary"
+              onClick={() => handleDelete(deleteConfirmId)}
+              style={{ backgroundColor: '#ef4444', borderColor: '#ef4444', color: '#fff' }}
+            >
+              Yes, Delete
+            </Button>
+            <button
+              type="button"
+              onClick={() => setDeleteConfirmId(null)}
+              className="text-sm text-stone-600 hover:text-stone-900 px-4 py-2"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </section>
   );
 }

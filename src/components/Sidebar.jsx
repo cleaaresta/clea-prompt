@@ -4,12 +4,10 @@ import { useAuth } from "../context/AuthContext";
 const adminNavItems = [
   { label: "Dashboard", to: "/admin", icon: "📊" },
   { label: "Products", to: "/admin/products", icon: "💄" },
-  { label: "Make Sale", to: "/admin/make-sale", icon: "🛒" },
   { label: "Inventory", to: "/admin/inventory", icon: "📦" },
-  { label: "Customers", to: "/admin/customers", icon: "👥" },
-  { label: "Analytics", to: "/admin/analytics", icon: "📈" },
   { label: "Orders", to: "/admin/orders", icon: "📋" },
-  { label: "Users", to: "/admin/users", icon: "🔐" },
+  { label: "Users", to: "/admin/users", icon: "👥" },
+  { label: "Analytics", to: "/admin/analytics", icon: "📈" },
   { label: "Settings", to: "/admin/settings", icon: "⚙️" },
   { label: "React Hooks", to: "/admin/react-hooks", icon: "🪝" },
 ];

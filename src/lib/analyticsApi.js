@@ -15,22 +15,25 @@ const sampleAnalytics = {
   topProducts: [
     {
       product_id: "p1",
+      name: "Lipstik Velvet Matte",
       product_name: "Lipstik Velvet Matte",
-      image_url: "",
+      image_url: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=150&q=80",
       total_qty_sold: 120,
       total_sales_amount: 120000 * 120,
     },
     {
       product_id: "p2",
+      name: "Foundation Liquid Glow",
       product_name: "Foundation Liquid Glow",
-      image_url: "",
+      image_url: "https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&w=150&q=80",
       total_qty_sold: 95,
       total_sales_amount: 185000 * 95,
     },
     {
       product_id: "p3",
+      name: "Eyeshadow Palette",
       product_name: "Eyeshadow Palette",
-      image_url: "",
+      image_url: "https://images.unsplash.com/photo-1512496115851-a408bd0e49ca?auto=format&fit=crop&w=150&q=80",
       total_qty_sold: 80,
       total_sales_amount: 220000 * 80,
     },
@@ -62,7 +65,7 @@ export async function fetchAnalytics() {
       .from("orders")
       .select("total_amount, status");
 
-    if (revErr) throw revErr;
+    if (revErr) console.error(revErr);
 
     const stats = {
       total_revenue: 0,
@@ -87,37 +90,44 @@ export async function fetchAnalytics() {
       .from("profiles")
       .select("*", { count: "exact", head: true });
 
-    if (memErr) throw memErr;
+    if (memErr) console.error(memErr);
     stats.total_members = membersCount || 0;
 
-    // top products (aggregate from order_items join products)
-    const { data: topData, error: topErr } = await supabase
-      .from("order_items")
-      .select(
-        "product_id, quantity, price_at_purchase, products(name, image_url)",
-      );
+    // top products (aggregate from products and order_items)
+    const { data: allProducts, error: prodErr } = await supabase
+      .from("products")
+      .select("id, name, image_url");
 
-    if (topErr) throw topErr;
+    if (prodErr) console.error(prodErr);
 
     const prodMap = new Map();
-    if (Array.isArray(topData)) {
+    if (Array.isArray(allProducts)) {
+      allProducts.forEach(p => {
+        prodMap.set(p.id, {
+          product_id: p.id,
+          name: p.name,
+          product_name: p.name,
+          image_url: p.image_url,
+          total_qty_sold: 0,
+          total_sales_amount: 0,
+        });
+      });
+    }
+
+    const { data: topData, error: topErr } = await supabase
+      .from("order_items")
+      .select("product_id, quantity, price_at_purchase");
+
+    if (!topErr && Array.isArray(topData)) {
       topData.forEach((it) => {
         const pid = it.product_id;
-        const name = it.products?.name || "Produk";
-        const img = it.products?.image_url || "";
         const qty = Number(it.quantity || 0);
         const amt = Number(it.price_at_purchase || 0) * qty;
-        if (!prodMap.has(pid))
-          prodMap.set(pid, {
-            product_id: pid,
-            product_name: name,
-            image_url: img,
-            total_qty_sold: 0,
-            total_sales_amount: 0,
-          });
-        const cur = prodMap.get(pid);
-        cur.total_qty_sold += qty;
-        cur.total_sales_amount += amt;
+        if (prodMap.has(pid)) {
+          const cur = prodMap.get(pid);
+          cur.total_qty_sold += qty;
+          cur.total_sales_amount += amt;
+        }
       });
     }
 
@@ -130,7 +140,7 @@ export async function fetchAnalytics() {
       .from("profiles")
       .select("tier");
 
-    if (tierErr) throw tierErr;
+    if (tierErr) console.error(tierErr);
 
     const tierMap = new Map();
     if (Array.isArray(tiersData)) {
@@ -145,10 +155,9 @@ export async function fetchAnalytics() {
 
     const result = { stats, topProducts, tierDist };
 
-    // If there's no meaningful data, return sample
-    const hasData =
-      stats.total_revenue > 0 || topProducts.length > 0 || tierDist.length > 0;
-    return hasData ? result : sampleAnalytics;
+    // If there's no meaningful data, return sample so the UI isn't empty with 0s
+    const hasSales = stats.total_revenue > 0 || topProducts.some(p => p.total_qty_sold > 0);
+    return hasSales ? result : sampleAnalytics;
   } catch (err) {
     console.error("analyticsApi.fetchAnalytics error", err);
     return sampleAnalytics;

@@ -1,11 +1,13 @@
 export default function DashboardSection({ note, actions }) {
   return (
     <div className="dashboard-top">
-      <div className="dashboard-intro">
-        <p className="dashboard-note">{note}</p>
-      </div>
+      {note && (
+        <div className="dashboard-intro">
+          <p className="dashboard-note">{note}</p>
+        </div>
+      )}
       {actions && (
-        <div className="dashboard-cta">
+        <div className="dashboard-cta" style={!note ? { marginLeft: 'auto' } : {}}>
           {actions}
         </div>
       )}

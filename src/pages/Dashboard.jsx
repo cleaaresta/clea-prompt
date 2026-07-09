@@ -33,7 +33,6 @@ export default function Dashboard() {
         />
       </FadeIn>
       <DashboardSection
-        note="Welcome back, manager! Berikut ringkasan performa toko makeupmu hari ini."
         actions={
           <>
             <Button variant="primary" size="sm">New Sale</Button>
