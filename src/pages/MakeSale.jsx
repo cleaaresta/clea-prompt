@@ -56,7 +56,6 @@ export default function MakeSale() {
     const { data: orderData, error: orderError } = await supabase
       .from("orders")
       .insert({
-        user_id: profile.id,
         total_amount: total,
         points_earned: Math.floor(total / 10000),
         status: "pending",

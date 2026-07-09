@@ -16,6 +16,7 @@ import ReactHooks from "./pages/ReactHooks";
 import Users from "./pages/Users";
 import MemberPage from "./pages/MemberPage";
 import ProductCatalog from "./pages/ProductCatalog";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProductCatalog />} />
           <Route path="/shop" element={<ProductCatalog />} />
+          <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route
             path="/login"
             element={

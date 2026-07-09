@@ -26,6 +26,9 @@ import {
   Check,
   ChevronRight,
   Loader2,
+  Plus,
+  Minus,
+  Trash2,
 } from "lucide-react";
 
 const DEFAULT_PRODUCT_IMAGE =
@@ -199,7 +202,7 @@ function StockBadge({ stock }) {
 
 export default function ProductCatalog() {
   const navigate = useNavigate();
-  const { session } = useAuth();
+  const { session, profile } = useAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -209,6 +212,70 @@ export default function ProductCatalog() {
   const [showHeaderSearch, setShowHeaderSearch] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+
+  // Cart States
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const addToCart = (product) => {
+    setCart((current) => {
+      const existingItem = current.find((item) => item.id === product.id);
+      if (existingItem) {
+        return current.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...current, { ...product, quantity: 1 }];
+    });
+    setIsCartOpen(true);
+  };
+
+  const removeFromCart = (productId) => {
+    setCart((current) => current.filter((item) => item.id !== productId));
+  };
+
+  const updateQuantity = (productId, delta) => {
+    setCart((current) =>
+      current.map((item) => {
+        if (item.id === productId) {
+          const newQ = item.quantity + delta;
+          return { ...item, quantity: newQ > 0 ? newQ : 1 };
+        }
+        return item;
+      })
+    );
+  };
+
+  const cartTotal = useMemo(
+    () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [cart]
+  );
+
+  const handleCheckout = async () => {
+    setIsCheckingOut(true);
+    
+    // Simulasi proses checkout tanpa database (hanya frontend)
+    setTimeout(() => {
+      // Menyimpan riwayat checkout ke localStorage
+      const existingHistory = JSON.parse(localStorage.getItem("mock_order_history") || "[]");
+      const newOrder = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+        type: `Pembelian: ${cart.length} item (Rp ${cartTotal.toLocaleString("id-ID")})`,
+        status: "Selesai",
+        statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200"
+      };
+      localStorage.setItem("mock_order_history", JSON.stringify([newOrder, ...existingHistory]));
+
+      setIsCheckingOut(false);
+      setCart([]);
+      setIsCartOpen(false);
+      navigate("/checkout-success");
+    }, 1500); // jeda 1.5 detik seolah-olah sedang memproses
+  };
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -304,15 +371,10 @@ export default function ProductCatalog() {
   }, [products, searchTerm, stockFilter, selectedCategory]);
 
   const handlePurchaseClick = () => {
-    if (!session) {
-      const message = encodeURIComponent(
-        "Silakan daftar akun terlebih dahulu untuk melakukan pembelian."
-      );
-      navigate(`/register?message=${message}`);
-      return;
+    if (selectedProduct) {
+      addToCart(selectedProduct);
+      setSelectedProduct(null);
     }
-
-    navigate("/member");
   };
 
   const handleCategoryClick = (categoryName) => {
@@ -493,13 +555,15 @@ export default function ProductCatalog() {
 
             {/* Shopping Bag Button */}
             <button
-              onClick={() => navigate(session ? "/member" : "/login")}
-              className="rounded-full p-2 text-[#2A2522] hover:bg-[#FFF5F5] hover:text-[#8C2D40] transition relative"
+              onClick={() => setIsCartOpen(true)}
+              className="rounded-full p-2 text-[#2A2522] hover:bg-[#FFF5F5] hover:text-[#8C2D40] transition relative cursor-pointer"
               aria-label="Keranjang Belanja"
             >
               <ShoppingBag className="h-5 w-5" />
-              {session && (
-                <span className="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-[#8C2D40]" />
+              {cart.length > 0 && (
+                <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-[#8C2D40] text-[9px] font-bold text-white flex items-center justify-center">
+                  {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                </span>
               )}
             </button>
 
@@ -1281,18 +1345,11 @@ export default function ProductCatalog() {
                 <div className="space-y-3">
                   <Button
                     onClick={handlePurchaseClick}
-                    className="w-full rounded-full bg-[#8C2D40] hover:bg-[#732231] text-white py-6 text-sm font-semibold tracking-wider transition uppercase cursor-pointer"
+                    disabled={selectedProduct.stock <= 0}
+                    className="w-full rounded-full bg-[#8C2D40] hover:bg-[#732231] text-white py-6 text-sm font-semibold tracking-wider transition uppercase cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#8C2D40]"
                   >
-                    Beli Sekarang
+                    {selectedProduct.stock > 0 ? "Tambahkan ke Keranjang" : "Habis Terjual"}
                   </Button>
-                  <Link to="/register" className="block w-full">
-                    <Button
-                      variant="outline"
-                      className="w-full rounded-full border-[#8C2D40]/30 hover:border-[#8C2D40] hover:bg-[#FFF5F5] text-[#8C2D40] py-6 text-sm font-semibold tracking-wider transition uppercase cursor-pointer"
-                    >
-                      Daftar untuk Beli
-                    </Button>
-                  </Link>
                   <DialogClose asChild>
                     <Button variant="ghost" className="w-full text-xs text-[#A89FB8] hover:text-[#6B6B6B] hover:bg-transparent cursor-pointer">
                       Tutup
@@ -1303,6 +1360,105 @@ export default function ProductCatalog() {
             </div>
           </DialogContent>
         )}
+      </Dialog>
+      {/* CART DIALOG */}
+      <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
+        <DialogContent className="sm:max-w-md rounded-2xl bg-[#FDFBF9] text-[#2A2522] border border-[#F3EAE3] p-6 max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="pb-4 border-b border-[#F3EAE3]">
+            <DialogTitle className="font-serif text-2xl font-semibold text-[#8C2D40]">
+              Keranjang Belanja
+            </DialogTitle>
+          </DialogHeader>
+
+          {cart.length === 0 ? (
+            <div className="py-12 flex flex-col items-center justify-center text-[#6B6B6B] space-y-3">
+              <ShoppingBag className="h-12 w-12 text-[#F3EAE3]" />
+              <p className="text-sm">Keranjang belanja Anda kosong.</p>
+              <Button
+                onClick={() => setIsCartOpen(false)}
+                className="rounded-full bg-[#FFF5F5] text-[#8C2D40] hover:bg-[#8C2D40] hover:text-white border border-[#8C2D40]/20 text-xs px-6 mt-2 transition-all cursor-pointer"
+              >
+                Mulai Belanja
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6 pt-4">
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                {cart.map((item) => (
+                  <div key={item.id} className="flex gap-4 border-b border-[#F3EAE3] pb-4">
+                    <img
+                      src={item.image_url || DEFAULT_PRODUCT_IMAGE}
+                      alt={item.name}
+                      className="w-16 h-16 rounded-md object-cover border border-[#F3EAE3]"
+                    />
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-sm font-bold text-[#2A2522] line-clamp-1">{item.name}</h4>
+                          <span className="text-xs text-[#8C2D40] font-semibold">
+                            Rp {Number(item.price).toLocaleString("id-ID")}
+                          </span>
+                        </div>
+                        <button onClick={() => removeFromCart(item.id)} className="text-[#A89FB8] hover:text-rose-500 transition cursor-pointer">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="flex items-center gap-3 mt-2">
+                        <button
+                          onClick={() => updateQuantity(item.id, -1)}
+                          className="h-6 w-6 rounded-full bg-[#FFF5F5] border border-[#F3EAE3] flex items-center justify-center text-[#2A2522] hover:border-[#8C2D40] hover:text-[#8C2D40] cursor-pointer"
+                        >
+                          <Minus className="h-3 w-3" />
+                        </button>
+                        <span className="text-xs font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.id, 1)}
+                          className="h-6 w-6 rounded-full bg-[#FFF5F5] border border-[#F3EAE3] flex items-center justify-center text-[#2A2522] hover:border-[#8C2D40] hover:text-[#8C2D40] cursor-pointer"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-xl bg-[#FFF5F5] border border-[#F3EAE3] p-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-[#6B6B6B]">Subtotal</span>
+                  <span className="font-semibold">Rp {cartTotal.toLocaleString("id-ID")}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-[#6B6B6B]">Pengiriman</span>
+                  <span className="font-semibold">{cartTotal >= 500000 ? "Gratis" : "Dihitung saat checkout"}</span>
+                </div>
+                <div className="border-t border-[#F3EAE3] pt-2 mt-2 flex justify-between font-bold">
+                  <span className="text-[#2A2522]">Total</span>
+                  <span className="text-[#8C2D40]">Rp {cartTotal.toLocaleString("id-ID")}</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Button
+                  onClick={handleCheckout}
+                  disabled={isCheckingOut}
+                  className="w-full rounded-full bg-[#8C2D40] hover:bg-[#732231] text-white py-6 text-sm font-semibold tracking-wider transition uppercase cursor-pointer disabled:opacity-70"
+                >
+                  {isCheckingOut ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses...</>
+                  ) : (
+                    "Lanjutkan Checkout"
+                  )}
+                </Button>
+                <DialogClose asChild>
+                  <Button variant="ghost" className="w-full text-xs text-[#A89FB8] hover:text-[#6B6B6B] hover:bg-transparent cursor-pointer">
+                    Lanjut Belanja
+                  </Button>
+                </DialogClose>
+              </div>
+            </div>
+          )}
+        </DialogContent>
       </Dialog>
     </div>
   );

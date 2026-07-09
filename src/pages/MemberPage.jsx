@@ -48,11 +48,11 @@ const MOCK_STATS = {
 };
 
 const MOCK_ACTIVITIES = [
-  { id: 1, date: "5 Jul 2026", type: "Pembelian: Divine Glow Palette",       status: "Selesai",   statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
-  { id: 2, date: "28 Jun 2026", type: "Redeem Reward: Voucher Rp 50.000",    status: "Selesai",   statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
-  { id: 3, date: "15 Jun 2026", type: "Pembelian: Velvet Rose Lipstick",     status: "Selesai",   statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
-  { id: 4, date: "10 Mei 2026", type: "Upgrade Level: Bronze → Gold",        status: "Selesai",   statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
-  { id: 5, date: "1  Mei 2026", type: "Pendaftaran Akun Baru",               status: "Selesai",   statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  { id: 1, date: "5 Jul 2026", type: "Pembelian: Divine Glow Palette", status: "Selesai", statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  { id: 2, date: "28 Jun 2026", type: "Redeem Reward: Voucher Rp 50.000", status: "Selesai", statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  { id: 3, date: "15 Jun 2026", type: "Pembelian: Velvet Rose Lipstick", status: "Selesai", statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  { id: 4, date: "10 Mei 2026", type: "Upgrade Level: Bronze → Gold", status: "Selesai", statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
+  { id: 5, date: "1  Mei 2026", type: "Pendaftaran Akun Baru", status: "Selesai", statusColor: "bg-emerald-50 text-emerald-700 border border-emerald-200" },
 ];
 
 // Urutan tier dari terendah ke tertinggi
@@ -115,34 +115,41 @@ export default function MemberPage() {
   const navigate = useNavigate();
 
   // Local state (tidak terhubung ke database sama sekali)
-  const [tier, setTier]           = useState("bronze");
-  const [fullName, setFullName]   = useState(
+  const [tier, setTier] = useState("bronze");
+  const [fullName, setFullName] = useState(
     authProfile?.full_name || MOCK_PROFILE.full_name
   );
-  const [activities, setActivities] = useState(MOCK_ACTIVITIES);
+  const [activities, setActivities] = useState(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem("mock_order_history") || "[]");
+      return [...stored, ...MOCK_ACTIVITIES];
+    } catch (e) {
+      return MOCK_ACTIVITIES;
+    }
+  });
 
   // Modal states
-  const [isEditOpen,    setIsEditOpen]    = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [isUpgradeOpen, setIsUpgradeOpen] = useState(false);
 
   // Form & UI states
-  const [editName,    setEditName]    = useState(fullName);
-  const [saveMsg,     setSaveMsg]     = useState("");
-  const [showSearch,  setShowSearch]  = useState(false);
-  const [searchTerm,  setSearchTerm]  = useState("");
+  const [editName, setEditName] = useState(fullName);
+  const [saveMsg, setSaveMsg] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [upgradeAnim, setUpgradeAnim] = useState(false);
 
   // Derived values
-  const email    = authProfile?.email || session?.email || MOCK_PROFILE.email;
+  const email = authProfile?.email || session?.email || MOCK_PROFILE.email;
   const joinDate = authProfile?.created_at
     ? new Date(authProfile.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
     : MOCK_PROFILE.joinDate;
 
-  const tierMeta      = TIER_META[tier] ?? TIER_META.bronze;
-  const tierIndex     = TIER_ORDER.indexOf(tier);
-  const canUpgrade    = tierIndex < TIER_ORDER.length - 1;
-  const nextTier      = canUpgrade ? TIER_ORDER[tierIndex + 1] : null;
-  const progressPct   = Math.min((tierMeta.points / tierMeta.targetPoints) * 100, 100);
+  const tierMeta = TIER_META[tier] ?? TIER_META.bronze;
+  const tierIndex = TIER_ORDER.indexOf(tier);
+  const canUpgrade = tierIndex < TIER_ORDER.length - 1;
+  const nextTier = canUpgrade ? TIER_ORDER[tierIndex + 1] : null;
+  const progressPct = Math.min((tierMeta.points / tierMeta.targetPoints) * 100, 100);
 
   // ── Handlers ──────────────────────────────
   const handleLogout = async () => {
@@ -639,11 +646,10 @@ export default function MemberPage() {
 function BenefitCard({ active, locked, title, benefits }) {
   return (
     <Card
-      className={`rounded-2xl border bg-white p-6 space-y-4 shadow-sm transition flex flex-col ${
-        active  ? "border-[#8C2D40] ring-4 ring-[#FFF5F5]" :
-        locked  ? "border-[#F3EAE3] opacity-60"            :
-                  "border-[#F3EAE3]"
-      }`}
+      className={`rounded-2xl border bg-white p-6 space-y-4 shadow-sm transition flex flex-col ${active ? "border-[#8C2D40] ring-4 ring-[#FFF5F5]" :
+          locked ? "border-[#F3EAE3] opacity-60" :
+            "border-[#F3EAE3]"
+        }`}
     >
       <div className="flex items-center justify-between pb-2 border-b border-[#F3EAE3]">
         <h3 className="font-serif text-lg font-semibold text-[#2A2522]">{title}</h3>
